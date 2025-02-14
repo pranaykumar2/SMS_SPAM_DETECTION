@@ -497,10 +497,7 @@
                 const welcomeMessage = [
                     `// Welcome ${currentUsername}! 👋`,
                     '// SMS Shield AI is ready to assist you',
-                    '// Enter a message and click Analyze or press Ctrl + Enter',
                     '',
-                    '// System Status: Online ✨',
-                    `// Session Started: ${new Date().toLocaleString()}`
                 ].join('\n');
 
                 const welcomeBlock = createResultBlock(welcomeMessage);
@@ -636,7 +633,6 @@
                 '🚨 HIGH RISK DETECTED',
                 '━━━━━━━━━━━━━━━━━━━━━━',
                 'Analysis Results:',
-                '• Confidence: 95%',
                 '• Category: Spam Message',
                 '• Threat Level: High',
                 '',
@@ -653,7 +649,6 @@
                 '✅ MESSAGE VERIFIED SAFE',
                 '━━━━━━━━━━━━━━━━━━━━━━',
                 'Analysis Results:',
-                '• Confidence: 98%',
                 '• Category: Legitimate',
                 '• Status: Clean',
                 '',
