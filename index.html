@@ -3,366 +3,357 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMS Threat Analysis | AI Detection System</title>
-    <!-- Adding modern fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>SMS Shield | AI Powered Detection</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Core palette */
-            --dark-black: #1D1616;
-            --deep-red: #8E1616;
-            --light-red: #D84040;
-            --light-gray: #EEEEEE;
-
-            /* Extended palette */
-            --surface-dark: #1a1414;
-            --surface-light: #2a2020;
-            --accent-red: #ff4d4d;
-            --accent-orange: #ff6b4d;
-            --success-green: #4dff88;
-            --neutral-gray: #a0a0a0;
-
-            /* Functional colors */
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --shadow-color: rgba(0, 0, 0, 0.2);
-            --glass-bg: rgba(29, 22, 22, 0.95);
+            /* Copilot-inspired color palette */
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent-purple: #7c3aed;
+            --accent-purple-hover: #6d28d9;
+            --accent-green: #238636;
+            --accent-red: #da3633;
+            --border-primary: #30363d;
+            --box-shadow: 0 0 0 1px rgba(240,246,252,0.1);
         }
 
-        /* Core Styles */
-        body {
+        * {
             margin: 0;
             padding: 0;
-            min-height: 100vh;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--surface-dark);
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
             color: var(--text-primary);
-            overflow-x: hidden;
-        }
-
-        .main-wrapper {
-            position: relative;
+            line-height: 1.5;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-            background:
-                    radial-gradient(circle at 10% 20%, rgba(142, 22, 22, 0.05) 0%, transparent 20%),
-                    radial-gradient(circle at 90% 80%, rgba(216, 64, 64, 0.05) 0%, transparent 20%);
         }
 
-        .container {
-            width: 100%;
+        .app-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            margin-bottom: 4rem;
-            position: relative;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin: 0;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-red) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: titleFloat 6s ease-in-out infinite;
-        }
-
-        .hero p {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            margin-top: 1rem;
-        }
-
-        /* Main Interface */
-        .interface-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 380px 1fr;
             gap: 2rem;
-            margin: 2rem 0;
+            height: 100vh;
         }
 
-        /* Input Section */
-        .input-section {
-            background: var(--surface-light);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: 20px 20px 60px #161212,
-            -20px -20px 60px #241c1c;
-            transition: transform 0.3s ease;
+        /* Sidebar Styles */
+        .sidebar {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            padding: 1.5rem;
+            height: calc(100vh - 4rem);
+            position: sticky;
+            top: 2rem;
         }
 
-        .input-section:hover {
-            transform: translateY(-5px);
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-primary);
         }
 
-        .input-wrapper {
-            position: relative;
-            margin: 2rem 0;
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--accent-purple), #9f7aea);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 20px;
+            height: 20px;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .input-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
         }
 
         .message-input {
             width: 100%;
-            padding: 1.5rem;
-            background: var(--surface-dark);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            height: 200px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            padding: 1rem;
             color: var(--text-primary);
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            resize: none;
         }
 
         .message-input:focus {
             outline: none;
-            border-color: var(--accent-red);
-            box-shadow: 0 0 20px rgba(216, 64, 64, 0.2);
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3);
         }
-
-        .floating-label {
-            position: absolute;
-            left: 1.5rem;
-            top: 1.5rem;
+        .message-input::placeholder {
             color: var(--text-secondary);
-            transition: all 0.3s ease;
-            pointer-events: none;
+        }
+        .message-input::placeholder:focus {
+            color: var(--accent-purple);
         }
 
-        .message-input:focus + .floating-label,
-        .message-input:not(:placeholder-shown) + .floating-label {
-            transform: translateY(-2.5rem) scale(0.85);
-            color: var(--accent-red);
-        }
-
-        /* Analysis Button */
-        .analyze-btn {
+        /* Action Button */
+        .analyze-button {
             width: 100%;
-            padding: 1.2rem;
-            background: linear-gradient(135deg, var(--deep-red), var(--accent-red));
-            border: none;
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 1.1rem;
-            font-weight: 600;
+            padding: 0.75rem 1rem;
+            background: var(--accent-purple);
+            border: 1px solid rgba(240, 246, 252, 0.1);
+            border-radius: 6px;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .analyze-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .analyze-btn:hover::before {
-            left: 100%;
-        }
-
-        .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(216, 64, 64, 0.2);
-        }
-
-        /* Results Section */
-        .results-section {
-            background: var(--surface-light);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: 20px 20px 60px #161212,
-            -20px -20px 60px #241c1c;
-            transition: all 0.3s ease;
-        }
-
-        .ai-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
         }
 
-        .ai-avatar {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--deep-red), var(--accent-red));
-            border-radius: 12px;
+        .analyze-button:hover {
+            background: var(--accent-purple-hover);
+        }
+
+        .analyze-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
             position: relative;
-            overflow: hidden;
         }
 
-        .ai-avatar::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
-            animation: shimmer 2s infinite;
+        .content-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+            z-index: 10;
         }
 
-        .ai-info {
-            flex: 1;
-        }
-
-        .ai-name {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 1.2rem;
-        }
-
-        .ai-status {
+        .session-info {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .user-avatar {
+            width: 24px;
+            height: 24px;
+            background: var(--bg-tertiary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
         }
 
         /* Analysis Results */
-        .result-content {
+        .results-container {
             padding: 1.5rem;
-            background: var(--surface-dark);
-            border-radius: 16px;
-            margin-top: 1rem;
         }
 
-        .result-text {
-            font-family: 'Plus Jakarta Sans', monospace;
-            font-size: 1.1rem;
+        .result-block {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
             line-height: 1.6;
-            margin: 0;
+            margin-bottom: 1rem;
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.3s ease;
         }
 
-        .result-text.show {
+        .result-block.show {
             opacity: 1;
             transform: translateY(0);
         }
 
+        .result-line {
+            display: flex;
+            gap: 1rem;
+            padding: 0.25rem 0;
+        }
+
+        .line-number {
+            color: var(--text-secondary);
+            text-align: right;
+            min-width: 2rem;
+            user-select: none;
+        }
+
+        .line-content {
+            flex: 1;
+        }
+
         /* Status Indicators */
-        .status-badge {
+        .status-indicator {
             display: inline-flex;
             align-items: center;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 1rem;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
-        .status-badge.spam {
-            background: rgba(216, 64, 64, 0.1);
+        .status-indicator.spam {
+            background: rgba(218, 54, 51, 0.1);
             color: var(--accent-red);
-            border: 1px solid rgba(216, 64, 64, 0.2);
         }
 
-        .status-badge.safe {
-            background: rgba(77, 255, 136, 0.1);
-            color: var(--success-green);
-            border: 1px solid rgba(77, 255, 136, 0.2);
+        .status-indicator.safe {
+            background: rgba(35, 134, 54, 0.1);
+            color: var(--accent-green);
         }
 
-        /* Loading Animation */
-        .typing-indicator {
+        /* Loading State */
+        .loading-indicator {
             display: none;
-            gap: 8px;
+            align-items: center;
+            gap: 0.5rem;
             padding: 1rem;
-            justify-content: flex-start;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
         }
 
-        .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent-red);
+        .loading-dots {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .dot {
+            width: 4px;
+            height: 4px;
+            background: var(--accent-purple);
             border-radius: 50%;
-            animation: typingBounce 1.4s infinite;
+            animation: pulse 1.5s infinite;
         }
 
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
 
-        @keyframes typingBounce {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(0.7); opacity: 0.5; }
         }
-
-        /* Responsive Design */
+        /* Responsive Styles */
         @media (max-width: 1024px) {
-            .interface-container {
+            .app-container {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                height: auto;
             }
 
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
+            .sidebar {
+                height: auto;
+                position: static;
             }
 
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .input-section, .results-section {
-                padding: 1.5rem;
+            .main-content {
+                height: 600px;
             }
         }
     </style>
 </head>
 <body>
-<div class="main-wrapper">
-    <div class="container">
-        <div class="hero">
-            <h1>SMS Threat Analysis</h1>
-            <p>Advanced AI-powered spam detection system</p>
+<div class="app-container">
+    <!-- Sidebar with Input -->
+    <div class="sidebar">
+        <div class="logo-section">
+            <div class="logo-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+            </div>
+            <div class="logo-text">SMS Shield</div>
         </div>
 
-        <div class="interface-container">
-            <div class="input-section">
-                <h2>Message Analysis</h2>
-                <div class="input-wrapper">
-                    <textarea class="message-input" id="smsInput" rows="5" placeholder=" "></textarea>
-                    <label class="floating-label">Enter message for analysis</label>
-                </div>
-                <button class="analyze-btn" id="checkButton">
-                    Analyze Message
-                </button>
+        <div class="input-container">
+            <label class="input-label">Enter message for analysis</label>
+            <textarea
+                    class="message-input"
+                    id="smsInput"
+                    placeholder="Type or paste your message here..."
+                    maxlength="500"
+            ></textarea>
+        </div>
+
+        <button class="analyze-button" id="analyzeBtn">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 2L3 5V11L8 14L13 11V5L8 2Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            Analyze Message
+        </button>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="content-header">
+            <div class="session-info">
+                Session: ${new Date().toISOString()} | User: pranaykumar2
             </div>
+            <div class="user-info">
+                <div class="user-avatar">P</div>
+            </div>
+        </div>
 
-            <div class="results-section">
-                <div class="ai-header">
-                    <div class="ai-avatar"></div>
-                    <div class="ai-info">
-                        <div class="ai-name">Threat Detection AI</div>
-                        <div class="ai-status">Online | Real-time Analysis</div>
-                    </div>
-                </div>
-
-                <div class="typing-indicator" id="typing-indicator">
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                    <div class="typing-dot"></div>
-                </div>
-
-                <div class="result-content">
-                    <p class="result-text" id="result"></p>
+        <div class="results-container" id="resultsContainer">
+            <div class="loading-indicator" id="loadingIndicator">
+                <span>Analyzing message</span>
+                <div class="loading-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
                 </div>
             </div>
         </div>
@@ -370,232 +361,108 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const checkButton = document.getElementById("checkButton");
-        const resultText = document.getElementById("result");
-        const smsInput = document.getElementById("smsInput");
-        const typingIndicator = document.getElementById("typing-indicator");
+    document.addEventListener('DOMContentLoaded', function() {
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const smsInput = document.getElementById('smsInput');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const loadingIndicator = document.getElementById('loadingIndicator');
 
-        function typeWriter(text, element, speed = 30) {
-            let i = 0;
-            element.textContent = '';
-            element.classList.remove('show');
+        function createResultBlock(content, lineStart = 1) {
+            const block = document.createElement('div');
+            block.className = 'result-block';
 
-            function type() {
-                if (i < text.length) {
-                    element.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                } else {
-                    element.classList.add('show');
-                }
-            }
+            const lines = content.split('\n');
+            lines.forEach((line, index) => {
+                const lineDiv = document.createElement('div');
+                lineDiv.className = 'result-line';
 
-            setTimeout(type, 500);
+                const lineNumber = document.createElement('span');
+                lineNumber.className = 'line-number';
+                lineNumber.textContent = (lineStart + index).toString().padStart(2, '0');
+
+                const lineContent = document.createElement('span');
+                lineContent.className = 'line-content';
+                lineContent.textContent = line;
+
+                lineDiv.appendChild(lineNumber);
+                lineDiv.appendChild(lineContent);
+                block.appendChild(lineDiv);
+            });
+
+            return block;
         }
 
-        checkButton.addEventListener("click", async function () {
-            const inputText = smsInput.value.trim();
+        async function analyzeMessage() {
+            const message = smsInput.value.trim();
+            if (!message) return;
 
-            if (!inputText) {
-                showResult("⚠️ Please enter a message for analysis.", "error");
-                return;
+            // Clear previous results
+            while (resultsContainer.firstChild) {
+                resultsContainer.removeChild(resultsContainer.firstChild);
             }
 
-            // Show typing indicator
-            typingIndicator.style.display = "flex";
-            resultText.classList.remove('show');
+            // Show loading state
+            loadingIndicator.style.display = 'flex';
+            resultsContainer.appendChild(loadingIndicator);
 
             try {
-                const response = await fetch("/predict", {
-                    method: "POST",
+                const response = await fetch('/predict', {
+                    method: 'POST',
                     headers: {
-                        "Content-Type": "application/json"
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ message: inputText })
+                    body: JSON.stringify({ message })
                 });
-
-                if (!response.ok) {
-                    throw new Error("Analysis request failed");
-                }
 
                 const data = await response.json();
 
+                // Hide loading indicator
+                loadingIndicator.style.display = 'none';
+
+                // Create timestamp block
+                const timestamp = new Date().toISOString();
+                const headerContent = `// Analysis started at ${timestamp}\n// User: pranaykumar2`;
+                const headerBlock = createResultBlock(headerContent);
+
+                // Create analysis block
+                const analysisContent = data.prediction === 'spam'
+                    ? `🚨 HIGH RISK DETECTED\n\nConfidence: 95%\nCategory: Spam Message\nThreat Level: High\n\nRecommendations:\n- Do not respond\n- Block sender\n- Report to carrier`
+                    : `✅ MESSAGE VERIFIED SAFE\n\nConfidence: 98%\nCategory: Legitimate\nStatus: Clean\n\nVerification:\n- No suspicious patterns\n- Valid format\n- Safe content`;
+
+                const analysisBlock = createResultBlock(analysisContent, 4);
+
+                // Add blocks with animation delay
                 setTimeout(() => {
-                    typingIndicator.style.display = "none";
+                    resultsContainer.appendChild(headerBlock);
+                    headerBlock.classList.add('show');
+                }, 100);
 
-                    let resultText = "";
-                    if (data.prediction === "spam") {
-                        resultText = `🚨 THREAT DETECTED
-
-Analysis Results:
-━━━━━━━━━━━━━━━━━━━━━━
-• Status: High Risk
-• Confidence: 95%
-• Category: Spam Message
-
-Recommendations:
-━━━━━━━━━━━━━━━━━━━━━━
-• Do not respond to this message
-• Block the sender immediately
-• Report to your carrier if received
-
-Security Advisory:
-━━━━━━━━━━━━━━━━━━━━━━
-This message exhibits characteristics
-commonly associated with fraudulent
-or malicious communication.`;
-                    } else {
-                        resultText = `✅ MESSAGE SAFE
-
-Analysis Results:
-━━━━━━━━━━━━━━━━━━━━━━
-• Status: Safe
-• Confidence: 98%
-• Category: Legitimate
-
-Overview:
-━━━━━━━━━━━━━━━━━━━━━━
-This message has been analyzed and
-appears to be legitimate communication
-with no detected security threats.
-
-Recommendation:
-━━━━━━━━━━━━━━━━━━━━━━
-Safe for normal interaction.`;
-                    }
-
-                    typeWriter(resultText, document.getElementById("result"));
-                }, 1500);
+                setTimeout(() => {
+                    resultsContainer.appendChild(analysisBlock);
+                    analysisBlock.classList.add('show');
+                }, 300);
 
             } catch (error) {
-                typingIndicator.style.display = "none";
-                showResult("🔧 Analysis Error: Please try again.", "error");
+                loadingIndicator.style.display = 'none';
+                const errorBlock = createResultBlock('// Error: Analysis service unavailable\n// Please try again later');
+                resultsContainer.appendChild(errorBlock);
+                errorBlock.classList.add('show');
             }
-        });
-
-        function showResult(message, type) {
-            typeWriter(message, document.getElementById("result"));
-
-            // Add status badge
-            const existingBadge = document.querySelector('.status-badge');
-            if (existingBadge) {
-                existingBadge.remove();
-            }
-
-            const badge = document.createElement('div');
-            badge.className = `status-badge ${type}`;
-            badge.textContent = type === 'spam' ? 'High Risk' : 'Safe';
-            document.querySelector('.result-content').appendChild(badge);
         }
 
-        // Add input animations and interactions
-        const messageInput = document.getElementById('smsInput');
+        // Event Listeners
+        analyzeBtn.addEventListener('click', analyzeMessage);
 
-        messageInput.addEventListener('focus', () => {
-            document.querySelector('.input-section').style.transform = 'scale(1.02)';
-        });
-
-        messageInput.addEventListener('blur', () => {
-            document.querySelector('.input-section').style.transform = 'scale(1)';
-        });
-
-        // Add dynamic character count
-        messageInput.addEventListener('input', function() {
-            const maxLength = 500;
-            const currentLength = this.value.length;
-
-            // Remove existing counter if present
-            let counter = document.querySelector('.char-counter');
-            if (!counter) {
-                counter = document.createElement('div');
-                counter.className = 'char-counter';
-                counter.style.cssText = `
-                        position: absolute;
-                        right: 1rem;
-                        bottom: -1.5rem;
-                        font-size: 0.8rem;
-                        color: var(--text-secondary);
-                        transition: all 0.3s ease;
-                    `;
-                this.parentElement.appendChild(counter);
-            }
-
-            counter.textContent = `${currentLength}/${maxLength} characters`;
-
-            if (currentLength >= maxLength) {
-                counter.style.color = 'var(--accent-red)';
-            } else {
-                counter.style.color = 'var(--text-secondary)';
+        smsInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                analyzeMessage();
             }
         });
 
-        // Add button loading state
-        checkButton.addEventListener('mousedown', function() {
-            this.style.transform = 'scale(0.98)';
-        });
-
-        checkButton.addEventListener('mouseup', function() {
-            this.style.transform = 'scale(1)';
-        });
-
-        // Add error shake animation
-        function shakeElement(element) {
-            element.style.animation = 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both';
-            element.addEventListener('animationend', () => {
-                element.style.animation = '';
-            });
-        }
-
-        // Add custom cursor trail effect
-        document.addEventListener('mousemove', function(e) {
-            const trail = document.createElement('div');
-            trail.className = 'cursor-trail';
-            trail.style.cssText = `
-                    position: fixed;
-                    width: 8px;
-                    height: 8px;
-                    background: var(--accent-red);
-                    border-radius: 50%;
-                    pointer-events: none;
-                    opacity: 0.5;
-                    z-index: 9999;
-                    top: ${e.clientY}px;
-                    left: ${e.clientX}px;
-                    transition: all 0.1s ease;
-                `;
-            document.body.appendChild(trail);
-
-            setTimeout(() => {
-                trail.style.opacity = '0';
-                trail.style.transform = 'scale(0)';
-                setTimeout(() => trail.remove(), 200);
-            }, 100);
-        });
-
-        // Add smooth scroll to results
-        function scrollToResults() {
-            const resultsSection = document.querySelector('.results-section');
-            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-
-        // Initialize on load
-        window.addEventListener('load', function() {
-            // Set initial placeholder text
-            showResult("Awaiting message analysis...", "initial");
-
-            // Add loading animation to AI avatar
-            const avatar = document.querySelector('.ai-avatar');
-            avatar.style.animation = 'pulse 2s infinite';
-        });
-
-        // Add keydown handler for submit on Enter
-        messageInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                checkButton.click();
-            }
-        });
+        // Initial welcome message
+        const welcomeBlock = createResultBlock('// Welcome to SMS Shield\n// Enter a message and click Analyze\n// or press Ctrl + Enter');
+        resultsContainer.appendChild(welcomeBlock);
+        welcomeBlock.classList.add('show');
     });
 </script>
 </body>
