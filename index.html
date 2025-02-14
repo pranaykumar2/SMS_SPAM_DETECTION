@@ -303,9 +303,90 @@
                 height: 600px;
             }
         }
+        /* Username Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 17, 23, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .popup-header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .popup-header h2 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-primary);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .popup-input:focus {
+            outline: none;
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3);
+        }
+
+        .popup-button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--accent-purple);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .popup-button:hover {
+            background: var(--accent-purple-hover);
+        }
     </style>
 </head>
 <body>
+
+<!-- Username Popup -->
+<div class="popup-overlay" id="usernamePopup">
+    <div class="popup-content">
+        <div class="popup-header">
+            <h2>Welcome to SMS Shield</h2>
+            <p>Please enter your username to continue</p>
+        </div>
+        <input type="text" class="popup-input" id="usernameInput" placeholder="Enter username">
+        <button class="popup-button" id="submitUsername">Continue</button>
+    </div>
+</div>
+
 <div class="app-container">
     <!-- Sidebar with Input -->
     <div class="sidebar">
@@ -366,6 +447,101 @@
         const smsInput = document.getElementById('smsInput');
         const resultsContainer = document.getElementById('resultsContainer');
         const loadingIndicator = document.getElementById('loadingIndicator');
+        const usernamePopup = document.getElementById('usernamePopup');
+        const usernameInput = document.getElementById('usernameInput');
+        const submitUsername = document.getElementById('submitUsername');
+        let currentUsername = '';
+
+        // Typewriter effect function
+        function typeWriter(element, text, speed = 30) {
+            let index = 0;
+            element.textContent = '';
+
+            return new Promise((resolve) => {
+                function addChar() {
+                    if (index < text.length) {
+                        element.textContent += text.charAt(index);
+                        index++;
+                        setTimeout(addChar, speed);
+                    } else {
+                        resolve();
+                    }
+                }
+                addChar();
+            });
+        }
+
+        // Cursor effect for typing
+        function addCursor(element) {
+            const cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
+            cursor.innerHTML = '▌';
+            element.appendChild(cursor);
+        }
+
+        // Handle username submission with animation
+        async function handleUsernameSubmit() {
+            const username = usernameInput.value.trim();
+            if (username) {
+                currentUsername = username;
+
+                // Fade out animation for popup
+                usernamePopup.style.opacity = '0';
+                await new Promise(r => setTimeout(r, 500));
+                usernamePopup.style.display = 'none';
+
+                // Update session info with animation
+                updateSessionInfo();
+
+                // Show welcome message with typewriter effect
+                const welcomeMessage = [
+                    `// Welcome ${currentUsername}! 👋`,
+                    '// SMS Shield AI is ready to assist you',
+                    '// Enter a message and click Analyze or press Ctrl + Enter',
+                    '',
+                    '// System Status: Online ✨',
+                    `// Session Started: ${new Date().toLocaleString()}`
+                ].join('\n');
+
+                const welcomeBlock = createResultBlock(welcomeMessage);
+                resultsContainer.appendChild(welcomeBlock);
+                welcomeBlock.classList.add('show');
+
+                // Type each line with delay
+                const lines = welcomeBlock.querySelectorAll('.line-content');
+                for (let i = 0; i < lines.length; i++) {
+                    await typeWriter(lines[i], lines[i].getAttribute('data-text'), 30);
+                    await new Promise(r => setTimeout(r, 100));
+                }
+            }
+        }
+
+        // Update session info with animation
+        function updateSessionInfo() {
+            const sessionInfo = document.querySelector('.session-info');
+            const currentDate = new Date().toLocaleString('en-GB', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }).replace(/\//g, '-');
+
+            sessionInfo.style.opacity = '0';
+            setTimeout(() => {
+                sessionInfo.textContent = `Session: ${currentDate} | User: ${currentUsername}`;
+                sessionInfo.style.opacity = '1';
+            }, 300);
+
+            // Update avatar with animation
+            const userAvatar = document.querySelector('.user-avatar');
+            userAvatar.style.transform = 'scale(0)';
+            setTimeout(() => {
+                userAvatar.textContent = currentUsername.charAt(0).toUpperCase();
+                userAvatar.style.transform = 'scale(1)';
+            }, 300);
+        }
 
         function createResultBlock(content, lineStart = 1) {
             const block = document.createElement('div');
@@ -382,7 +558,7 @@
 
                 const lineContent = document.createElement('span');
                 lineContent.className = 'line-content';
-                lineContent.textContent = line;
+                lineContent.setAttribute('data-text', line);
 
                 lineDiv.appendChild(lineNumber);
                 lineDiv.appendChild(lineContent);
@@ -394,75 +570,125 @@
 
         async function analyzeMessage() {
             const message = smsInput.value.trim();
-            if (!message) return;
+            if (!message) {
+                // Shake animation for empty input
+                smsInput.classList.add('shake');
+                setTimeout(() => smsInput.classList.remove('shake'), 500);
+                return;
+            }
 
-            // Clear previous results
+            // Clear previous results with fade out
+            const previousResults = resultsContainer.querySelectorAll('.result-block');
+            previousResults.forEach(block => {
+                block.style.opacity = '0';
+                block.style.transform = 'translateY(10px)';
+            });
+            await new Promise(r => setTimeout(r, 300));
             while (resultsContainer.firstChild) {
                 resultsContainer.removeChild(resultsContainer.firstChild);
             }
 
-            // Show loading state
+            // Show loading animation
             loadingIndicator.style.display = 'flex';
-            resultsContainer.appendChild(loadingIndicator);
 
             try {
                 const response = await fetch('/predict', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ message })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message,
+                        username: currentUsername,
+                        timestamp: new Date().toISOString()
+                    })
                 });
 
                 const data = await response.json();
 
-                // Hide loading indicator
+                // Hide loading with fade
+                loadingIndicator.style.opacity = '0';
+                await new Promise(r => setTimeout(r, 300));
                 loadingIndicator.style.display = 'none';
+                loadingIndicator.style.opacity = '1';
 
-                // Create timestamp block
-                const timestamp = new Date().toISOString();
-                const headerContent = `// Analysis started at ${timestamp}\n// User: pranaykumar2`;
-                const headerBlock = createResultBlock(headerContent);
-
-                // Create analysis block
+                // Create and show analysis results with typewriter effect
                 const analysisContent = data.prediction === 'spam'
-                    ? `🚨 HIGH RISK DETECTED\n\nConfidence: 95%\nCategory: Spam Message\nThreat Level: High\n\nRecommendations:\n- Do not respond\n- Block sender\n- Report to carrier`
-                    : `✅ MESSAGE VERIFIED SAFE\n\nConfidence: 98%\nCategory: Legitimate\nStatus: Clean\n\nVerification:\n- No suspicious patterns\n- Valid format\n- Safe content`;
+                    ? createSpamAnalysis()
+                    : createSafeAnalysis();
 
-                const analysisBlock = createResultBlock(analysisContent, 4);
+                const analysisBlock = createResultBlock(analysisContent);
+                resultsContainer.appendChild(analysisBlock);
+                analysisBlock.classList.add('show');
 
-                // Add blocks with animation delay
-                setTimeout(() => {
-                    resultsContainer.appendChild(headerBlock);
-                    headerBlock.classList.add('show');
-                }, 100);
-
-                setTimeout(() => {
-                    resultsContainer.appendChild(analysisBlock);
-                    analysisBlock.classList.add('show');
-                }, 300);
+                // Type each line
+                const lines = analysisBlock.querySelectorAll('.line-content');
+                for (let line of lines) {
+                    await typeWriter(line, line.getAttribute('data-text'));
+                    await new Promise(r => setTimeout(r, 50));
+                }
 
             } catch (error) {
-                loadingIndicator.style.display = 'none';
-                const errorBlock = createResultBlock('// Error: Analysis service unavailable\n// Please try again later');
-                resultsContainer.appendChild(errorBlock);
-                errorBlock.classList.add('show');
+                showError('Analysis service unavailable. Please try again.');
+            }
+        }
+
+        function createSpamAnalysis() {
+            return [
+                '🚨 HIGH RISK DETECTED',
+                '━━━━━━━━━━━━━━━━━━━━━━',
+                'Analysis Results:',
+                '• Confidence: 95%',
+                '• Category: Spam Message',
+                '• Threat Level: High',
+                '',
+                'Recommendations:',
+                '• Do not respond',
+                '• Block sender',
+                '• Report to carrier',
+                '━━━━━━━━━━━━━━━━━━━━━━'
+            ].join('\n');
+        }
+
+        function createSafeAnalysis() {
+            return [
+                '✅ MESSAGE VERIFIED SAFE',
+                '━━━━━━━━━━━━━━━━━━━━━━',
+                'Analysis Results:',
+                '• Confidence: 98%',
+                '• Category: Legitimate',
+                '• Status: Clean',
+                '',
+                'Verification:',
+                '• No suspicious patterns',
+                '• Valid format',
+                '• Safe content',
+                '━━━━━━━━━━━━━━━━━━━━━━'
+            ].join('\n');
+        }
+
+        async function showError(message) {
+            const errorBlock = createResultBlock(`// Error: ${message}\n// Please try again later`);
+            resultsContainer.appendChild(errorBlock);
+            errorBlock.classList.add('show');
+
+            const lines = errorBlock.querySelectorAll('.line-content');
+            for (let line of lines) {
+                await typeWriter(line, line.getAttribute('data-text'));
             }
         }
 
         // Event Listeners
+        submitUsername.addEventListener('click', handleUsernameSubmit);
+        usernameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleUsernameSubmit();
+        });
         analyzeBtn.addEventListener('click', analyzeMessage);
-
         smsInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && e.ctrlKey) {
-                analyzeMessage();
-            }
+            if (e.key === 'Enter' && e.ctrlKey) analyzeMessage();
         });
 
-        // Initial welcome message
-        const welcomeBlock = createResultBlock('// Welcome to SMS Shield\n// Enter a message and click Analyze\n// or press Ctrl + Enter');
-        resultsContainer.appendChild(welcomeBlock);
-        welcomeBlock.classList.add('show');
+        // Initialize animations
+        usernamePopup.style.opacity = '1';
+        usernameInput.focus();
     });
 </script>
 </body>
