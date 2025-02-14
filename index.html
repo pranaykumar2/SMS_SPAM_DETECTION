@@ -3,72 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMS Spam Detector</title>
+    <title>SMS Spam Detective</title>
     <style>
+        /* CSS Variables for Color Palette */
+        :root {
+            --dark-black: #1D1616;
+            --deep-red: #8E1616;
+            --light-red: #D84040;
+            --light-gray: #EEEEEE;
+        }
+
+        /* Mesh Grid Animation */
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Glowing Effect */
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px var(--light-red); }
+            50% { text-shadow: 0 0 20px var(--light-red), 0 0 30px var(--deep-red); }
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--dark-black);
+            background-image: 
+                linear-gradient(rgba(142, 22, 22, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(142, 22, 22, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: gridMove 15s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
         .container {
+            background: rgba(29, 22, 22, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(216, 64, 64, 0.3);
             max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
+        .container:hover {
+            transform: translateZ(20px);
+            box-shadow: 0 0 30px rgba(216, 64, 64, 0.5);
+        }
+
+        h2 {
+            color: var(--light-gray);
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: glow 2s ease-in-out infinite;
+            font-size: 2.5em;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
         input {
-            width: 80%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
+            width: 100%;
+            padding: 1rem;
+            background: rgba(238, 238, 238, 0.1);
+            border: 2px solid var(--deep-red);
+            border-radius: 8px;
+            color: var(--light-gray);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
         }
+
+        input:focus {
+            outline: none;
+            border-color: var(--light-red);
+            box-shadow: 0 0 15px rgba(216, 64, 64, 0.3);
+        }
+
+        input::placeholder {
+            color: rgba(238, 238, 238, 0.5);
+        }
+
         button {
-            padding: 12px 24px;
-            cursor: pointer;
-            background-color: #28a745;
-            color: white;
+            width: 100%;
+            padding: 1rem;
+            background: var(--deep-red);
+            color: var(--light-gray);
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
+
         button:hover {
-            background-color: #218838;
+            background: var(--light-red);
+            transform: translateY(-2px);
         }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%) rotate(35deg);
+            transition: transform 0.5s ease;
+        }
+
+        button:hover::after {
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+
         #result {
-            margin-top: 20px;
-            font-size: 18px;
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
             font-weight: bold;
-            padding: 10px;
-            border-radius: 4px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
         }
+
+        #result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .spam {
-            color: #dc3545;
-            background-color: #f8d7da;
+            background: rgba(216, 64, 64, 0.2);
+            color: var(--light-red);
+            border: 2px solid var(--light-red);
         }
+
         .ham {
-            color: #28a745;
-            background-color: #d4edda;
+            background: rgba(40, 167, 69, 0.2);
+            color: #2ecc71;
+            border: 2px solid #2ecc71;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .loading span {
+            width: 10px;
+            height: 10px;
+            background: var(--light-red);
+            border-radius: 50%;
+            margin: 0 5px;
+            animation: bounce 0.5s ease-in-out infinite;
+        }
+
+        .loading span:nth-child(2) { animation-delay: 0.1s; }
+        .loading span:nth-child(3) { animation-delay: 0.2s; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+
+            input, button {
+                padding: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>SMS Spam Detector</h2>
+        <h2>SMS Spam Detective</h2>
         
-        <label for="smsInput">Enter SMS:</label>
-        <input type="text" id="smsInput" placeholder="Type your message here">
+        <div class="input-group">
+            <input type="text" id="smsInput" placeholder="Type your message here..." autocomplete="off">
+        </div>
 
-        <button id="checkButton">Check</button>
+        <button id="checkButton">Analyze Message</button>
+
+        <div class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
         <div id="result"></div>
     </div>
 
-    <script src="/script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const checkButton = document.getElementById("checkButton");
+            const resultDiv = document.getElementById("result");
+            const smsInput = document.getElementById("smsInput");
+            const loading = document.querySelector(".loading");
+
+            checkButton.addEventListener("click", async function () {
+                const inputText = smsInput.value.trim();
+
+                if (!inputText) {
+                    showResult("Please enter a message!", "error");
+                    return;
+                }
+
+                // Show loading animation
+                loading.style.display = "flex";
+                resultDiv.classList.remove("show");
+
+                try {
+                    const response = await fetch("/predict", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ message: inputText })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("API request failed");
+                    }
+
+                    const data = await response.json();
+                    
+                    // Hide loading animation
+                    loading.style.display = "none";
+
+                    if (data.prediction === "spam") {
+                        showResult("⚠️ This message is SPAM!", "spam");
+                    } else {
+                        showResult("✅ This message is safe!", "ham");
+                    }
+
+                } catch (error) {
+                    loading.style.display = "none";
+                    showResult("Error analyzing message. Please try again.", "error");
+                }
+            });
+
+            function showResult(message, type) {
+                resultDiv.textContent = message;
+                resultDiv.className = type;
+                resultDiv.classList.add("show");
+            }
+
+            // Add input animation
+            smsInput.addEventListener("focus", function() {
+                this.parentElement.classList.add("focused");
+            });
+
+            smsInput.addEventListener("blur", function() {
+                this.parentElement.classList.remove("focused");
+            });
+        });
+    </script>
 </body>
 </html>
